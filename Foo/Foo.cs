@@ -9,7 +9,15 @@ namespace Hont
     {
         void Start()
         {
+            var blueTex = new Texture2D(64, 64);
+            for (int x = 0; x < blueTex.width; x++)
+                for (int y = 0; y < blueTex.height; y++)
+                    blueTex.SetPixel(x, y, Color.blue);
+            blueTex.Apply();
+
             var mat = new Material(Shader.Find("Hidden/FooShader"));
+            mat.SetTexture("_Image", blueTex);
+            mat.SetVector("_ImageSize", new Vector4(blueTex.width, blueTex.height));
             mat.SetPass(0);
             var tempRT = RenderTexture.GetTemporary(16, 16, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
             tempRT.filterMode = FilterMode.Point;

@@ -29,25 +29,30 @@
 				float4 vertex : SV_POSITION;
 			};
 
+			sampler2D _Image;
+			float4 _ImageSize;
+
 			v2f vert(uint vid : SV_VertexID)
 			{
 				v2f o = (v2f)0;
 
+				half y = floor(vid / _ImageSize.x);
+				half x = (vid - y * _ImageSize.x) / _ImageSize.x;
+				y = y / _ImageSize.y;
+
 				o.vertex = 0;
 
-				int roll = vid % 4;
+				float4 image_col = tex2Dlod(_Image, half4(x,y,0,0));
 
-				if(roll == 0)
-					o.color = float4(0.05, 0, 0, 0);
-
-				if (roll == 1)
-					o.color = float4(0, 0.05, 0, 0);
-
-				if (roll == 2)
-					o.color = float4(0, 0, 0.05, 0);
-
-				if (roll == 3)
-					o.color = float4(0, 0, 0, 0.05);
+				if (all(image_col.rgb == half3(0, 0, 1)))
+				//if (all(image_col.rgb == half3(0, 1, 1)))    /*error*/
+				{
+					o.color = 1;
+				}
+				else
+				{
+					o.color = 0;
+				}
 
 				return o;
 			}
@@ -55,6 +60,8 @@
 			[maxvertexcount(4)]
 			void geom(point v2f vertElement[1], inout TriangleStream<v2f> triStream)
 			{
+				if (vertElement[0].color.r <= 0) return;
+
 				float size = 10;
 
 				float4 v1 = vertElement[0].vertex + float4(-size, -size, 0, 0);
