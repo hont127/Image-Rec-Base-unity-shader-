@@ -26,7 +26,7 @@ public class RecTest2 : MonoBehaviour
 
         mRealtimeImageStatistics = new RealtimeImageStatistics();
         mRealtimeImageStatistics.RecGainValue = 0.03f;
-        mRealtimeImageStatistics.Initialization(mMaskRT, Color.white, 9, 4, 0);
+        mRealtimeImageStatistics.Initialization(mMaskRT, Color.white, 9, 4, 1);
 
         mCommandBuffer = new CommandBuffer();
         Camera.main.AddCommandBuffer(CameraEvent.AfterEverything, mCommandBuffer);
@@ -64,7 +64,7 @@ public class RecTest2 : MonoBehaviour
 
         var r = mRealtimeImageStatistics.ExecuteStatistics();
         Debug.Log("r: " + r);
-        if (r >= 3)
+        if (r >= 2.7f)
         {
             StartCoroutine(Show());
             Camera.main.RemoveCommandBuffer(CameraEvent.AfterEverything, mCommandBuffer);

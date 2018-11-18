@@ -35,15 +35,22 @@
 			float4 _Rec_Color;
 			float4 _GainValue;
 
-			float4 statistics_sample(sampler2D image, float4 rec_color, half4 uv, half2 image_size)
+			#define GAIN_VALUE _GainValue.x
+			#define LOOP_IMAGE_SIZE_X _LoopImageSize.x
+			#define LOOP_IMAGE_SIZE_Y _LoopImageSize.y
+			#define GRID_SIZE_X _SampleFilter.x
+			#define GRID_SIZE_Y _SampleFilter.y
+
+
+			float4 Statistics_sample(sampler2D image, float4 rec_color, half4 uv, half2 image_size)
 			{
 				float4 result = 0;
 
-				int roll_width = (uv.x * image_size.x);
+				int roll_width =(uv.x * image_size.x);
 				int roll_height = (uv.y * image_size.y);
 
-				if (roll_width  % _SampleFilter.z < _SampleFilter.w)return 0;
-				if (roll_height  % _SampleFilter.z < _SampleFilter.w)return 0;
+				if (roll_width  % _SampleFilter.z  < _SampleFilter.w)return 0;
+				if (roll_height  % _SampleFilter.z  < _SampleFilter.w)return 0;
 
 				float4 image_col = tex2Dlod(image, uv);
 				if (all(rec_color.rgb == image_col.rgb))
@@ -51,16 +58,16 @@
 					int roll = (uv.x*image_size.x + uv.y*image_size.y) % 4;
 
 					if (roll == 0)
-						result = float4(_GainValue.x, 0, 0, 0);
+						result = float4(GAIN_VALUE, 0, 0, 0);
 
 					if (roll == 1)
-						result = float4(0, _GainValue.x, 0, 0);
+						result = float4(0, GAIN_VALUE, 0, 0);
 
 					if (roll == 2)
-						result = float4(0, 0, _GainValue.x, 0);
+						result = float4(0, 0, GAIN_VALUE, 0);
 
 					if (roll == 3)
-						result = float4(0, 0, 0, _GainValue.x);
+						result = float4(0, 0, 0, GAIN_VALUE);
 				}
 
 				return result;
@@ -72,20 +79,20 @@
 
 				o.vertex = 0;
 
-				half2 image_size = half2(_SampleFilter.x * _LoopImageSize.x, _SampleFilter.y * _LoopImageSize.y);
+				half2 image_size = half2(GRID_SIZE_X * LOOP_IMAGE_SIZE_X, GRID_SIZE_Y * LOOP_IMAGE_SIZE_Y);
 
-				half y = floor(vid / _LoopImageSize.x);
-				half x = (vid - y * _LoopImageSize.x) / _LoopImageSize.x;
-				y = y / _LoopImageSize.y;
+				half y = floor(vid / LOOP_IMAGE_SIZE_X);
+				half x = (vid - y * LOOP_IMAGE_SIZE_X) / LOOP_IMAGE_SIZE_X;
+				y = y / LOOP_IMAGE_SIZE_Y;
 
-				for (half rx = 0; rx < _SampleFilter.x; rx++)
+				for (half rx = 0; rx < GRID_SIZE_X; rx++)
 				{
-					for (half ry = 0; ry < _SampleFilter.y; ry++)
+					for (half ry = 0; ry < GRID_SIZE_Y; ry++)
 					{
 						half xx = x + rx;
 						half yy = y + ry;
 
-						float4 r = statistics_sample(_Image, _Rec_Color, half4(xx, yy, 0, 0), image_size);
+						float4 r = Statistics_sample(_Image, _Rec_Color, half4(xx, yy, 0, 0), image_size);
 
 						o.color += r;
 					}

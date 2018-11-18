@@ -26,7 +26,7 @@ namespace Hont
             tempRT.wrapMode = TextureWrapMode.Clamp;
             var cacheRT = RenderTexture.active;
             RenderTexture.active = tempRT;
-            Graphics.DrawProcedural(MeshTopology.Points, 10, 1);
+            Graphics.DrawProcedural(MeshTopology.Points, blueTex.width * blueTex.height, 1);
             var tex2D = new Texture2D(16, 16, TextureFormat.ARGB32, false, false);
             tex2D.wrapMode = TextureWrapMode.Clamp;
             tex2D.anisoLevel = 0;
