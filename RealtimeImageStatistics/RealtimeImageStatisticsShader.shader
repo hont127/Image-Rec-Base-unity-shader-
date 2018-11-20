@@ -41,13 +41,13 @@
 			#define GRID_SIZE_X _SampleFilter.x
 			#define GRID_SIZE_Y _SampleFilter.y
 
-
+			//像素判断的逻辑实现
 			float4 Statistics_sample(sampler2D image, float4 rec_color, half4 uv, half2 image_size)
 			{
 				float4 result = 0;
 
-				int roll_width =(uv.x * image_size.x);
-				int roll_height = (uv.y * image_size.y);
+				uint roll_width =(uv.x * image_size.x);
+				uint roll_height = (uv.y * image_size.y);
 
 				if (roll_width  % _SampleFilter.z  < _SampleFilter.w)return 0;
 				if (roll_height  % _SampleFilter.z  < _SampleFilter.w)return 0;
@@ -55,7 +55,7 @@
 				float4 image_col = tex2Dlod(image, uv);
 				if (all(rec_color.rgb == image_col.rgb))
 				{
-					int roll = (uv.x*image_size.x + uv.y*image_size.y) % 4;
+					uint roll = (roll_width + roll_height) % 4;
 
 					if (roll == 0)
 						result = float4(GAIN_VALUE, 0, 0, 0);
@@ -84,6 +84,7 @@
 				half y = floor(vid / LOOP_IMAGE_SIZE_X);
 				half x = (vid - y * LOOP_IMAGE_SIZE_X) / LOOP_IMAGE_SIZE_X;
 				y = y / LOOP_IMAGE_SIZE_Y;
+				//将vid转化为x,y坐标
 
 				for (half rx = 0; rx < GRID_SIZE_X; rx++)
 				{
@@ -97,6 +98,7 @@
 						o.color += r;
 					}
 				}
+				//一个顶点处理多个像素
 
 				return o;
 			}
