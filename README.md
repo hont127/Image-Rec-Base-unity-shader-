@@ -1,4 +1,8 @@
 # Image-Rec-Base-unity-shader-
 Image Rec 一个基于shader的简单图像检测实现
 
+对应博文:https://www.cnblogs.com/hont/p/9977401.html
+
+一共两个案例以及封装好的类，请丢到unity工程里去运行。第二个案例就是gif图中的效果。
+
 ![](https://github.com/hont127/Image-Rec-Base-unity-shader-/blob/master/Preview.gif)
