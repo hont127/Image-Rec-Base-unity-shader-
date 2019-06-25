@@ -49,8 +49,8 @@ public class RecTest2 : MonoBehaviour
         //mCommandBuffer.ClearRenderTarget(true, true, Color.black);
         mCommandBuffer.SetGlobalVector("_BrushPoint", brushBall.position);
         mCommandBuffer.SetGlobalMatrix("_ObjectToWorldMatrix", drawItem.transform.localToWorldMatrix);
-        mCommandBuffer.SetProjectionMatrix(Matrix4x4.Perspective(60f, 1f, 0.0001f, 1f));
-        mCommandBuffer.DrawMesh(drawItem.GetComponent<MeshFilter>().sharedMesh, Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one), mCacheMaskBrushMat);
+        mCommandBuffer.SetProjectionMatrix(Matrix4x4.Perspective(60f, 1f, 0.001f, 10f));
+        mCommandBuffer.DrawMesh(drawItem.GetComponent<MeshFilter>().sharedMesh, Matrix4x4.TRS(new Vector3(0f, 0f, -9f), Quaternion.identity, Vector3.one), mCacheMaskBrushMat);
         mCommandBuffer.SetRenderTarget(BuiltinRenderTextureType.CameraTarget);
 
         mCommandBuffer.GetTemporaryRT(tempRTID, mMaskRT.descriptor);

@@ -36,7 +36,7 @@
 			{
 				v2f o = (v2f)0;
 
-				o.vertex = UnityObjectToClipPos(float4(v.uv.x - 0.5, v.uv.y - 0.5, -0.9, 0));
+				o.vertex = UnityObjectToClipPos(float4(v.uv.x-0.55, v.uv.y+0.5, 0, v.vertex.w));
 				o.wPos = mul(_ObjectToWorldMatrix, v.vertex);
 				o.uv = v.uv;
 				return o;
